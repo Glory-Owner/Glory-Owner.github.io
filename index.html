@@ -10,13 +10,13 @@
    <div id="result"></div>
 <script>
 
-document.addEventListener('DOMContentLoaded', function() {     // after page loads, more or less
+document.addEventListener('DOMContentLoaded', function() {     
 
    document.querySelector('#btn').onclick = async function(){
-       var response = await fetch('cit5students.json');        // ajax GET request
+       var response = await fetch('cit5students.json');        
 
        if(response.ok) {
-            var data = await response.json();         // 'data' holds an array of objects
+            var data = await response.json();         
 
             var studentsByMajor = {};
 
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {     // after page loa
             var tableContents = '';
             for (const major in studentsByMajor) {
               tableContents += `<h2>${major} Students</h2>`;
-              tableContents += "<table cellspacing='5'>"     // generate table
+              tableContents += "<table cellspacing='5'>"     // Generate table
               tableContents += "<tr><td>Name</td><td>Midterm</td><td>Final</td></tr>";
 
               studentsByMajor[major].forEach((student) => {
