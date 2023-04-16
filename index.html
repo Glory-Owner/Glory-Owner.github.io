@@ -1,0 +1,30 @@
+<!-- Anas El Hayani -->
+
+<!DOCTYPE html>
+<html>
+<head><title>MPH to KPH Conversion Table</title>
+  <script type="text/javascript"> 
+
+    var mph = [20, 35, 45, 55, 65, 70, 75, 80, 90];
+
+    function showTable() {
+      var tableHtml = "<table>";
+      tableHtml += "<tr><th>Miles per Hr.</th><th>Kilometers per Hr.</th></tr>";
+      
+      for (var i = 0; i < mph.length; i++) {
+        var kph = (mph[i] * 1.609).toFixed(1);
+        tableHtml += "<tr><td>" + mph[i] + "</td><td>" + kph + "</td></tr>";
+      }
+      
+      tableHtml += "</table>";
+      document.getElementById("table-container").innerHTML = tableHtml;
+    }
+  </script>
+</head><body>
+
+  <h1>MPH to KPH Conversion Table</h1>
+  <p>Click the button below to generate the conversion table</p>
+  <button onclick="showTable()">Click for table</button>
+  <div id="table-container"></div>
+
+</body></html>
