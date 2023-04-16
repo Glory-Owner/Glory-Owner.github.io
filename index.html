@@ -1,78 +1,66 @@
 <!-- Anas El Hayani -->
 
 <!DOCTYPE html>
-<html><head> <meta charset="UTF-8">
-   <title>students</title>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>students</title>
 </head>
 <body style='margin-left: 30px;'>
-   <h1>Exam Scores by Major</h1>
+  <h1>Exam Scores</h1>
+  <p>CIT5 and Business students: Exam Scores</p>
 
-<button id='cit-btn'>CIT Majors</button>
-<button id='bus-btn'>Business Majors</button>
-   <div id="result"></div>
-<script>
+  <button id='cit-btn'>CIT5 Majors</button>
+  <button id='bus-btn'>Business Majors</button>
 
-document.addEventListener('DOMContentLoaded', function() {     // after page loads, more or less
+  <div id="result"></div>
 
-   var data = [];     // declare variable outside of function so it can be used by both buttons
+  <script>
 
-   document.querySelector('#cit-btn').onclick = function(){
-      var citData = data.filter(student => student.major === 'CIT');
+    document.addEventListener('DOMContentLoaded', function() {
 
-      if (citData.length > 0) {
-        var tableContents = "<h2>CIT Students</h2>";
-        tableContents += "<table cellspacing='5'>";
-        tableContents += "<tr><td>Name</td><td>Midterm</td><td>Final</td></tr>";
+      var data;
 
-        citData.forEach((student) => {
-            tableContents += `<tr><td> ${student.name} </td>
-                    <td> ${student.midterm} </td>
-                    <td> ${student.final} </td></tr>`;
-        });
-
-        tableContents += "</table>";
-
-        document.querySelector('#result').innerHTML = tableContents;
-      } else {
-        document.querySelector('#result').innerHTML = "No CIT students found.";
-      }
-   };
-
-   document.querySelector('#bus-btn').onclick = function(){
-      var busData = data.filter(student => student.major === 'BUS');
-
-      if (busData.length > 0) {
-        var tableContents = "<h2>Business Students</h2>";
-        tableContents += "<table cellspacing='5'>";
-        tableContents += "<tr><td>Name</td><td>Midterm</td><td>Final</td></tr>";
-
-        busData.forEach((student) => {
-            tableContents += `<tr><td> ${student.name} </td>
-                    <td> ${student.midterm} </td>
-                    <td> ${student.final} </td></tr>`;
-        });
-
-        tableContents += "</table>";
-
-        document.querySelector('#result').innerHTML = tableContents;
-      } else {
-        document.querySelector('#result').innerHTML = "No Business students found.";
-      }
-   };
-
-   document.querySelector('#btn').onclick = async function(){
-       var response = await fetch('cit5students.json');        // ajax GET request
-
-       if(response.ok) {
-            data = await response.json();         // 'data' holds an array of objects
-            document.querySelector('#result').innerHTML = "Click a button to view exam scores by major.";
-       }
-       else {
+      document.querySelector('#cit-btn').onclick = function(){
+        fetch('cit5students.json').then(response => {
+          if(response.ok) {
+            response.json().then(json => {
+              data = json.filter(obj => obj.major === 'CIT5');
+              displayData(data);
+            });
+          } else {
             document.querySelector('#result').innerHTML = "Data not found";
-       }
-   };
+          }
+        });
+      };
 
-});
-</script>
+      document.querySelector('#bus-btn').onclick = function(){
+        fetch('cit5students.json').then(response => {
+          if(response.ok) {
+            response.json().then(json => {
+              data = json.filter(obj => obj.major === 'BUSINESS');
+              displayData(data);
+            });
+          } else {
+            document.querySelector('#result').innerHTML = "Data not found";
+          }
+        });
+      };
+
+      function displayData(data) {
+        var tableContents = "<table cellspacing='5'>";
+        tableContents += "<tr><td>Name</td><td>Midterm</td><td>Final</td></tr>";
+        for(var i = 0; i < data.length; i++) {
+          tableContents += `<tr><td>${data[i].name}</td>
+                             <td>${data[i].midterm}</td>
+                             <td>${data[i].final}</td></tr>`;
+        }
+        tableContents += "</table>";
+        document.querySelector('#result').innerHTML = tableContents;
+      }
+
+    });
+  </script>
 </body>
 </html>
+
