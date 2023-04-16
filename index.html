@@ -6,43 +6,66 @@
 </head>
 <body style='margin-left: 30px;'>
    <h1>Exam Scores by Major</h1>
-   <input type="button" id='btn' value="Get Student Scores">
+
+<button id='cit-btn'>CIT Majors</button>
+<button id='bus-btn'>Business Majors</button>
    <div id="result"></div>
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {     // after page loads, more or less
 
+   var data = [];     // declare variable outside of function so it can be used by both buttons
+
+   document.querySelector('#cit-btn').onclick = function(){
+      var citData = data.filter(student => student.major === 'CIT');
+
+      if (citData.length > 0) {
+        var tableContents = "<h2>CIT Students</h2>";
+        tableContents += "<table cellspacing='5'>";
+        tableContents += "<tr><td>Name</td><td>Midterm</td><td>Final</td></tr>";
+
+        citData.forEach((student) => {
+            tableContents += `<tr><td> ${student.name} </td>
+                    <td> ${student.midterm} </td>
+                    <td> ${student.final} </td></tr>`;
+        });
+
+        tableContents += "</table>";
+
+        document.querySelector('#result').innerHTML = tableContents;
+      } else {
+        document.querySelector('#result').innerHTML = "No CIT students found.";
+      }
+   };
+
+   document.querySelector('#bus-btn').onclick = function(){
+      var busData = data.filter(student => student.major === 'BUS');
+
+      if (busData.length > 0) {
+        var tableContents = "<h2>Business Students</h2>";
+        tableContents += "<table cellspacing='5'>";
+        tableContents += "<tr><td>Name</td><td>Midterm</td><td>Final</td></tr>";
+
+        busData.forEach((student) => {
+            tableContents += `<tr><td> ${student.name} </td>
+                    <td> ${student.midterm} </td>
+                    <td> ${student.final} </td></tr>`;
+        });
+
+        tableContents += "</table>";
+
+        document.querySelector('#result').innerHTML = tableContents;
+      } else {
+        document.querySelector('#result').innerHTML = "No Business students found.";
+      }
+   };
+
    document.querySelector('#btn').onclick = async function(){
        var response = await fetch('cit5students.json');        // ajax GET request
 
        if(response.ok) {
-            var data = await response.json();         // 'data' holds an array of objects
-
-            var studentsByMajor = {};
-
-            data.forEach((student) => {
-              if (!studentsByMajor[student.major]) {
-                studentsByMajor[student.major] = [];
-              }
-              studentsByMajor[student.major].push(student);
-            });
-
-            var tableContents = '';
-            for (const major in studentsByMajor) {
-              tableContents += `<h2>${major} Students</h2>`;
-              tableContents += "<table cellspacing='5'>"     // generate table
-              tableContents += "<tr><td>Name</td><td>Midterm</td><td>Final</td></tr>";
-
-              studentsByMajor[major].forEach((student) => {
-                  tableContents += `<tr><td> ${student.name} </td>
-                          <td> ${student.midterm} </td>
-                          <td> ${student.final} </td></tr>`;
-              });
-
-              tableContents += "</table><br><br>";
-            }
-
-            document.querySelector('#result').innerHTML = tableContents;
+            data = await response.json();         // 'data' holds an array of objects
+            document.querySelector('#result').innerHTML = "Click a button to view exam scores by major.";
        }
        else {
             document.querySelector('#result').innerHTML = "Data not found";
